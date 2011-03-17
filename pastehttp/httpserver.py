@@ -20,7 +20,8 @@ if pyOpenSSL is installed, it also provides SSL capabilities.
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from SocketServer import ThreadingMixIn
 from itertools import count
-from paste.util import converters
+from pasterhttp import converters
+from pasterhttp import killthread
 import Queue
 import atexit
 import logging
@@ -1323,7 +1324,7 @@ def serve(application, host=None, port=None, handler=None, ssl_pem=None,
 # Note: this gets a separate function because it has to expect string
 # arguments (though that's not much of an issue yet, ever?)
 def server_runner(wsgi_app, global_conf, **kwargs):
-    from paste.deploy.converters import asbool
+    from pastehttp.converters import asbool
     for name in ['port', 'socket_timeout', 'threadpool_workers',
                  'threadpool_hung_thread_limit',
                  'threadpool_kill_thread_limit',
@@ -1411,7 +1412,7 @@ server_runner.__doc__ = (serve.__doc__ or '') + """
 
 
 if __name__ == '__main__':
-    from paste.wsgilib import dump_environ
+    from pastehttp.util import dump_environ
     #serve(dump_environ, ssl_pem="test.pem")
     serve(dump_environ, server_version="Wombles/1.0",
           protocol_version="HTTP/1.1", port="8888")
